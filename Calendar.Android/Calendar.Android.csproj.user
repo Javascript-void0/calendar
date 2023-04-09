@@ -4,5 +4,6 @@
     <SelectedDevice>Sony XQ-BQ62</SelectedDevice>
     <SelectedPlatformGroup>PhysicalDevice</SelectedPlatformGroup>
     <ActiveDebugProfile>Sony XQ-BQ62 %28Android 13.0 - API 33%29</ActiveDebugProfile>
+    <AndroidDesignerPreferredTheme>MainTheme</AndroidDesignerPreferredTheme>
   </PropertyGroup>
 </Project>
