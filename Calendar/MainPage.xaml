@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Calendar.MainPage">
+
+	<ContentPage.Resources>
+		<Style TargetType="Label">
+			<Setter Property="FontFamily" Value="SpaceGrotesk"/>
+		</Style>
+
+		<Style x:Key="dayOfWeek" TargetType="Label">
+			<Setter Property="HorizontalTextAlignment" Value="Center"/>
+			<Setter Property="TextColor" Value="#525252"/>
+		</Style>
+		
+		<Style x:Key="date" TargetType="Label">
+			<Setter Property="HorizontalTextAlignment" Value="Center"/>
+			<Setter Property="VerticalTextAlignment" Value="Center"/>
+			<Setter Property="AbsoluteLayout.LayoutBounds" Value="0, 0, 1, 1"/>
+			<Setter Property="AbsoluteLayout.LayoutFlags" Value="All"/>
+			<Setter Property="FontSize" Value="20"/>
+		</Style>
+		<Style x:Key="today" TargetType="Label" BasedOn="{StaticResource date}">
+			<Setter Property="FontFamily" Value="SpaceGroteskBold"/>
+			<Setter Property="TextColor" Value="#4d749a"/>
+		</Style>
+		<Style x:Key="todayWeek" TargetType="Label" BasedOn="{StaticResource date}">
+			<Setter Property="TextColor" Value="#9cbbd9"/>
+		</Style>
+		<Style x:Key="otherMonth" TargetType="Label" BasedOn="{StaticResource date}">
+			<Setter Property="TextColor" Value="#525252"/>
+		</Style>
+
+		<Style TargetType="Button">
+			<Setter Property="BackgroundColor" Value="Transparent"/>
+			<Setter Property="FontFamily" Value="EnvyCodeR"/>
+			<Setter Property="FontSize" Value="20"/>
+		</Style>
+	</ContentPage.Resources>
+
+	<StackLayout BackgroundColor="#202020" Padding="0, 80, 0, 0">
+
+		<StackLayout Orientation="Horizontal" Padding="12">
+			<Label x:Name="monthYear" Text="January 1970" FontSize="30" Padding="25, 0, 0, 0"
+				   HorizontalOptions="StartAndExpand"/>
+			<Button Text="&lt;" WidthRequest="50" HorizontalOptions="End" Clicked="PrevMonth"/>
+			<Button Text="&gt;" WidthRequest="50" HorizontalOptions="End" Clicked="NextMonth"/>
+		</StackLayout>
+
+		<Grid x:Name="grid" HeightRequest="370" Padding="15"
+			  ColumnSpacing="5" RowSpacing="5">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="20"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+
+			<Label Grid.Row="0" Grid.Column="0" Text="S" Style="{StaticResource dayOfWeek}"/>
+			<Label Grid.Row="0" Grid.Column="1" Text="M" Style="{StaticResource dayOfWeek}"/>
+			<Label Grid.Row="0" Grid.Column="2" Text="T" Style="{StaticResource dayOfWeek}"/>
+			<Label Grid.Row="0" Grid.Column="3" Text="W" Style="{StaticResource dayOfWeek}"/>
+			<Label Grid.Row="0" Grid.Column="4" Text="T" Style="{StaticResource dayOfWeek}"/>
+			<Label Grid.Row="0" Grid.Column="5" Text="F" Style="{StaticResource dayOfWeek}"/>
+			<Label Grid.Row="0" Grid.Column="6" Text="S" Style="{StaticResource dayOfWeek}"/>
+
+			<!--<AbsoluteLayout Grid.Row="1" Grid.Column="0">
+				<Label Style="{StaticResource today}" Text="0"/>
+			</AbsoluteLayout>
+			<AbsoluteLayout Grid.Row="1" Grid.Column="1">
+				<Label Style="{StaticResource date}" Text="1"/>
+			</AbsoluteLayout>-->
+
+		</Grid>
+		<Button Text="&lt; Today &gt;" HeightRequest="50" WidthRequest="150" Background="Transparent" 
+				HorizontalOptions="End" Margin="25, 0" Clicked="JumpToday"/>
+	</StackLayout>
+
+</ContentPage>
