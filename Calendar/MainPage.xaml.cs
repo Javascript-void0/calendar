@@ -71,7 +71,8 @@ namespace Calendar
 
 					if (n == now.Day && currMonth == now.Month && currYear == now.Year)
 						label.SetDynamicResource(Label.StyleProperty, "today");
-					else if (now.Day % 7 == r && currMonth == now.Month && currYear == now.Year)
+					// highlight current week
+					else if (n >= now.Day - (int)now.DayOfWeek && n < now.Day - (int)now.DayOfWeek + 7 && inMonth && currMonth == now.Month && currYear == now.Year)
 						label.SetDynamicResource(Label.StyleProperty, "todayWeek");
 					else if (!inMonth)
 						label.SetDynamicResource(Label.StyleProperty, "otherMonth");
