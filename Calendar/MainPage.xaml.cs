@@ -50,7 +50,6 @@ namespace Calendar
 			monthYear.Text = "" + firstDay.ToString("MMMM") + " " + currYear;
 			var dayOfWeek = (int)firstDay.DayOfWeek;
 			var daysInMonth = DateTime.DaysInMonth(currYear, currMonth);
-			TodayButtonVisible();
 
 			// find previous month days
 			var prevMonth = firstDay.AddMonths(-1);
@@ -58,6 +57,7 @@ namespace Calendar
 			var inMonth = false;
 
 			var n = prevDaysInMonth - dayOfWeek + 1; // start?
+			var numEvents = 0;
 			for (var r = 0; r < 6; r++)
 			{
 				for (var c = 0; c < 7; c++)
@@ -110,6 +110,7 @@ namespace Calendar
 							AbsoluteLayout.SetLayoutFlags(circle, AbsoluteLayoutFlags.All);
 							circle.SetDynamicResource(BoxView.StyleProperty, "event");
 							square.Children.Add(circle);
+							numEvents++;
 						}
 					}
 
@@ -124,6 +125,7 @@ namespace Calendar
 					grid.Children.Add(square);
 				}
 			}
+			totalEvents.Text = "" + numEvents;
 		}
 
 		private bool hasEvent(DateTime dt)
@@ -168,18 +170,11 @@ namespace Calendar
 
 		private void JumpToday(object sender, EventArgs e)
 		{
+			if (currMonth == now.Month && currYear == now.Year)
+				return;
 			currMonth = now.Month;
 			currYear = now.Year;
 			GenerateGrid();
-		}
-
-		private void TodayButtonVisible()
-		{
-			// remove today button for present month
-			if (now.Month == currMonth && now.Year == currYear)
-				todayButton.IsVisible = false;
-			else
-				todayButton.IsVisible = true;
 		}
 
 		private void SwipePrevMonth(object sender, SwipedEventArgs e)
@@ -197,12 +192,10 @@ namespace Calendar
 			if (date == null)
 			{
 				eventWindow.IsVisible = false;
-				TodayButtonVisible();
 			}
 			else
 			{
 				eventWindow.IsVisible = true;
-				todayButton.IsVisible = false;
 				if (exist)
 					eventDate.Text = "Event - " + date;
 				else

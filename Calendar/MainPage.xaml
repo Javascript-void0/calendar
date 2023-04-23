@@ -55,8 +55,8 @@
 
 		<!--buttons for next and prev month-->
 		<StackLayout Orientation="Horizontal" Padding="12">
-			<Label x:Name="monthYear" Text="January 1970" FontSize="30" Padding="25, 0, 0, 0"
-				   HorizontalOptions="StartAndExpand"/>
+			<Button x:Name="monthYear" Text="January 1970" FontSize="30" Padding="25, 0, 0, 0"
+				    HorizontalOptions="StartAndExpand" FontFamily="SpaceGrotesk" Clicked="JumpToday"/>
 			<Button Text="&lt;" WidthRequest="50" HorizontalOptions="End" Clicked="PrevMonth"/>
 			<Button Text="&gt;" WidthRequest="50" HorizontalOptions="End" Clicked="NextMonth"/>
 		</StackLayout>
@@ -98,25 +98,33 @@
 			</AbsoluteLayout>-->
 
 		</Grid>
-		
-		<!--jump to today button-->
-		<Button x:Name="todayButton" Text="&lt;/today&gt;" HeightRequest="50" WidthRequest="150" Background="Transparent" TextTransform="None"
-				HorizontalOptions="End" Margin="25, 0" Clicked="JumpToday"/>
+
+		<BoxView HeightRequest="2" BackgroundColor="Gray" Margin="35, 25, 35, 10" CornerRadius="5"/>
 
 		<!--window-->
-		<AbsoluteLayout x:Name="eventWindow" HeightRequest="190" Margin="25" IsVisible="false">
-			<BoxView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#525252" CornerRadius="20"/>
-			<BoxView AbsoluteLayout.LayoutBounds="0, 0, 1, 60" AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional" BackgroundColor="#303030" CornerRadius="20, 20, 0, 0"/>
-			<StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 60" AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional" Orientation="Horizontal">
-				<Label x:Name="eventDate" Text="New Event - Thursday, January 1" FontSize="20" Padding="20, 15" HorizontalOptions="StartAndExpand"/>
-				<Button Text="x" HorizontalOptions="End" WidthRequest="60" FontFamily="SpaceGrotesk" Clicked="CloseEventWindow"/>
-			</StackLayout>
-			<StackLayout AbsoluteLayout.LayoutBounds="0, 60, 1, 1" AbsoluteLayout.LayoutFlags="XProportional,SizeProportional" Margin="25, 15">
-				<Entry x:Name="eventDetails" Placeholder="Event" TextColor="{DynamicResource BackgroundColor}" PlaceholderColor="Gray" HorizontalOptions="FillAndExpand"/>
-				<StackLayout Orientation="Horizontal" HorizontalOptions="End">
-					<Button x:Name="saveButton" Text="save" WidthRequest="70" HorizontalOptions="End" Clicked="SaveEvent"/>
-					<Button x:Name="deleteButton" Text="delete" WidthRequest="90" HorizontalOptions="End" Clicked="DeleteEvent" IsVisible="false"/>
+		<AbsoluteLayout HeightRequest="190" Margin="25">
+			<StackLayout x:Name="stats" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+				<StackLayout Orientation="Horizontal">
+					<Label Text="Total Events: " FontSize="20" HorizontalOptions="StartAndExpand"/>
+					<Label x:Name="totalEvents" Text="0" FontSize="20" HorizontalOptions="End"/>
 				</StackLayout>
+			</StackLayout>
+			<StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+				<AbsoluteLayout x:Name="eventWindow" IsVisible="false">
+					<BoxView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#525252" CornerRadius="10"/>
+					<BoxView AbsoluteLayout.LayoutBounds="0, 0, 1, 60" AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional" BackgroundColor="#303030" CornerRadius="10, 10, 0, 0"/>
+					<StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 60" AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional" Orientation="Horizontal">
+						<Label x:Name="eventDate" Text="New Event - Thursday, January 1" FontSize="20" Padding="20, 15" HorizontalOptions="StartAndExpand"/>
+						<Button Text="x" HorizontalOptions="End" WidthRequest="60" FontFamily="SpaceGrotesk" Clicked="CloseEventWindow"/>
+					</StackLayout>
+					<StackLayout AbsoluteLayout.LayoutBounds="0, 60, 1, 1" AbsoluteLayout.LayoutFlags="XProportional,SizeProportional" Margin="25, 15">
+						<Entry x:Name="eventDetails" Placeholder="Event" TextColor="{DynamicResource BackgroundColor}" PlaceholderColor="Gray" HorizontalOptions="FillAndExpand"/>
+						<StackLayout Orientation="Horizontal" HorizontalOptions="End">
+							<Button x:Name="saveButton" Text="save" WidthRequest="70" HorizontalOptions="End" Clicked="SaveEvent"/>
+							<Button x:Name="deleteButton" Text="delete" WidthRequest="90" HorizontalOptions="End" Clicked="DeleteEvent" IsVisible="false"/>
+						</StackLayout>
+					</StackLayout>
+				</AbsoluteLayout>
 			</StackLayout>
 		</AbsoluteLayout>
 	</StackLayout>
