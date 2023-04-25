@@ -29,6 +29,8 @@ namespace Calendar
 			currYear = now.Year;
 			currMonth = now.Month;
 			GenerateGrid();
+
+			eventWindow.TranslationY = 565;
 		}
 
 		private void ClearGrid()
@@ -187,19 +189,39 @@ namespace Calendar
 			NextMonth(null, null);
 		}
 
-		private void ToggleWindow(String date = null, bool exist = false)
+		private async void ToggleWindow(String date = null, bool exist = false)
 		{
+			var t = (uint)200;
 			if (date == null)
 			{
+				// hide keyboard
+				eventDetails.IsEnabled = false;
+				eventDetails.IsEnabled = true;
+				// animation
+				await eventWindow.TranslateTo(0, 565, t, Easing.CubicInOut);
+
+				// hide
 				eventWindow.IsVisible = false;
+				eventWindow.InputTransparent = true;
+				dim.IsVisible = false;
+				dim.InputTransparent = true;
 			}
 			else
 			{
+				// unhide
 				eventWindow.IsVisible = true;
+				eventWindow.InputTransparent = false;
+				dim.IsVisible = true;
+				dim.InputTransparent = false;
+
 				if (exist)
 					eventDate.Text = "Event - " + date;
 				else
 					eventDate.Text = "New Event - " + date;
+
+				// animation
+				eventDetails.Focus();
+				await eventWindow.TranslateTo(0, 0, t, Easing.CubicInOut);
 			}
 		}
 

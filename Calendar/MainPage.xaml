@@ -45,88 +45,123 @@
 		</Style>
 	</ContentPage.Resources>
 
-	<StackLayout BackgroundColor="#202020" Padding="0, 80, 0, 0">
+	<AbsoluteLayout>
 
-		<!--swipe gestures-->
-		<StackLayout.GestureRecognizers>
-			<SwipeGestureRecognizer Direction="Right" Swiped="SwipePrevMonth"/>
-			<SwipeGestureRecognizer Direction="Left" Swiped="SwipeNextMonth"/>
-		</StackLayout.GestureRecognizers>
+		<Grid BackgroundColor="#202020" Padding="0, 80, 0, 0"
+					 AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
 
-		<!--buttons for next and prev month-->
-		<StackLayout Orientation="Horizontal" Padding="12">
-			<Button x:Name="monthYear" Text="January 1970" FontSize="30" Padding="25, 0, 0, 0"
-				    HorizontalOptions="StartAndExpand" FontFamily="SpaceGrotesk" Clicked="JumpToday"/>
-			<Button Text="&lt;" WidthRequest="50" HorizontalOptions="End" Clicked="PrevMonth"/>
-			<Button Text="&gt;" WidthRequest="50" HorizontalOptions="End" Clicked="NextMonth"/>
-		</StackLayout>
-
-		<Grid x:Name="grid" HeightRequest="370" Padding="15"
-			  ColumnSpacing="5" RowSpacing="5">
 			<Grid.RowDefinitions>
-				<RowDefinition Height="20"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
+				<RowDefinition Height="100"/>
+				<RowDefinition Height="400"/>
+				<RowDefinition Height="37"/>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="*"/>
-			</Grid.ColumnDefinitions>
+			
+			<!--swipe gestures-->
+			<!--<Grid.GestureRecognizers>
+				<SwipeGestureRecognizer Direction="Right" Swiped="SwipePrevMonth"/>
+				<SwipeGestureRecognizer Direction="Left" Swiped="SwipeNextMonth"/>
+			</Grid.GestureRecognizers>-->
 
-			<Label Grid.Row="0" Grid.Column="0" Text="S" Style="{StaticResource dayOfWeek}"/>
-			<Label Grid.Row="0" Grid.Column="1" Text="M" Style="{StaticResource dayOfWeek}"/>
-			<Label Grid.Row="0" Grid.Column="2" Text="T" Style="{StaticResource dayOfWeek}"/>
-			<Label Grid.Row="0" Grid.Column="3" Text="W" Style="{StaticResource dayOfWeek}"/>
-			<Label Grid.Row="0" Grid.Column="4" Text="T" Style="{StaticResource dayOfWeek}"/>
-			<Label Grid.Row="0" Grid.Column="5" Text="F" Style="{StaticResource dayOfWeek}"/>
-			<Label Grid.Row="0" Grid.Column="6" Text="S" Style="{StaticResource dayOfWeek}"/>
+			<!--buttons for next and prev month-->
+			<StackLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Padding="12">
+				<Button x:Name="monthYear" Text="January 1970" FontSize="30" Padding="25, 0, 0, 0"
+			    HorizontalOptions="StartAndExpand" FontFamily="SpaceGrotesk" Clicked="JumpToday"/>
+				<Button Text="&lt;" WidthRequest="50" HorizontalOptions="End" Clicked="PrevMonth"/>
+				<Button Text="&gt;" WidthRequest="50" HorizontalOptions="End" Clicked="NextMonth"/>
+			</StackLayout>
 
-			<!--<AbsoluteLayout Grid.Row="1" Grid.Column="0">
+			<Grid x:Name="grid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HeightRequest="370" Padding="15"
+				  ColumnSpacing="5" RowSpacing="5">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="20"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<Label Grid.Row="0" Grid.Column="0" Text="S" Style="{StaticResource dayOfWeek}"/>
+				<Label Grid.Row="0" Grid.Column="1" Text="M" Style="{StaticResource dayOfWeek}"/>
+				<Label Grid.Row="0" Grid.Column="2" Text="T" Style="{StaticResource dayOfWeek}"/>
+				<Label Grid.Row="0" Grid.Column="3" Text="W" Style="{StaticResource dayOfWeek}"/>
+				<Label Grid.Row="0" Grid.Column="4" Text="T" Style="{StaticResource dayOfWeek}"/>
+				<Label Grid.Row="0" Grid.Column="5" Text="F" Style="{StaticResource dayOfWeek}"/>
+				<Label Grid.Row="0" Grid.Column="6" Text="S" Style="{StaticResource dayOfWeek}"/>
+
+					<!--<AbsoluteLayout Grid.Row="1" Grid.Column="0">
 				<Label Style="{StaticResource today}" Text="0"/>
 			</AbsoluteLayout>
 			<AbsoluteLayout Grid.Row="1" Grid.Column="1">
 				<Label Style="{StaticResource date}" Text="1"/>
 			</AbsoluteLayout>-->
 
-		</Grid>
+			</Grid>
 
-		<BoxView HeightRequest="2" BackgroundColor="Gray" Margin="35, 25, 35, 10" CornerRadius="5"/>
+			<BoxView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HeightRequest="2" BackgroundColor="Gray" Margin="35, 25, 35, 10" CornerRadius="5"/>
 
-		<!--window-->
-		<AbsoluteLayout HeightRequest="190" Margin="25">
-			<StackLayout x:Name="stats" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+			<!--bottom half-->
+			<StackLayout Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="stats" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" Margin="25">
 				<StackLayout Orientation="Horizontal">
 					<Label Text="Total Events: " FontSize="20" HorizontalOptions="StartAndExpand"/>
 					<Label x:Name="totalEvents" Text="0" FontSize="20" HorizontalOptions="End"/>
 				</StackLayout>
 			</StackLayout>
-			<StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
-				<AbsoluteLayout x:Name="eventWindow" IsVisible="false">
-					<BoxView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#525252" CornerRadius="10"/>
-					<BoxView AbsoluteLayout.LayoutBounds="0, 0, 1, 60" AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional" BackgroundColor="#303030" CornerRadius="10, 10, 0, 0"/>
-					<StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 60" AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional" Orientation="Horizontal">
-						<Label x:Name="eventDate" Text="New Event - Thursday, January 1" FontSize="20" Padding="20, 15" HorizontalOptions="StartAndExpand"/>
+
+			<!--tap gestures-->
+			<BoxView Grid.Row="3" Grid.Column="0">
+				<BoxView.GestureRecognizers>
+					<TapGestureRecognizer Tapped="PrevMonth"/>
+				</BoxView.GestureRecognizers>
+			</BoxView>
+			<BoxView Grid.Row="3" Grid.Column="1">
+				<BoxView.GestureRecognizers>
+					<TapGestureRecognizer Tapped="NextMonth"/>
+				</BoxView.GestureRecognizers>
+			</BoxView>
+
+		</Grid>
+
+		<!--background dim-->
+		<BoxView x:Name="dim" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All"
+				 BackgroundColor="#80000000" InputTransparent="True" IsVisible="False">
+			<BoxView.GestureRecognizers>
+				<TapGestureRecognizer Tapped="CloseEventWindow"/>
+			</BoxView.GestureRecognizers>
+		</BoxView>
+
+		<!--input window for new event-->
+		<StackLayout x:Name="eventWindow" AbsoluteLayout.LayoutBounds="0, 1, 1, 565" AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional"
+					 IsVisible="false" InputTransparent="True">
+			<AbsoluteLayout HeightRequest="1000">
+				<BoxView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#202020" CornerRadius="30, 30, 0, 0"/>
+				<StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+					<StackLayout Padding="30, 30, 30, 0" Orientation="Horizontal">
+						<Label x:Name="eventDate" Text="New Event - Thursday, January 1" LineBreakMode="TailTruncation" FontSize="20" Padding="20, 15" HorizontalOptions="StartAndExpand"/>
 						<Button Text="x" HorizontalOptions="End" WidthRequest="60" FontFamily="SpaceGrotesk" Clicked="CloseEventWindow"/>
 					</StackLayout>
-					<StackLayout AbsoluteLayout.LayoutBounds="0, 60, 1, 1" AbsoluteLayout.LayoutFlags="XProportional,SizeProportional" Margin="25, 15">
+					<StackLayout Margin="35, 15">
 						<Entry x:Name="eventDetails" Placeholder="Event" TextColor="{DynamicResource BackgroundColor}" PlaceholderColor="Gray" HorizontalOptions="FillAndExpand"/>
 						<StackLayout Orientation="Horizontal" HorizontalOptions="End">
 							<Button x:Name="saveButton" Text="save" WidthRequest="70" HorizontalOptions="End" Clicked="SaveEvent"/>
 							<Button x:Name="deleteButton" Text="delete" WidthRequest="90" HorizontalOptions="End" Clicked="DeleteEvent" IsVisible="false"/>
 						</StackLayout>
 					</StackLayout>
-				</AbsoluteLayout>
-			</StackLayout>
-		</AbsoluteLayout>
-	</StackLayout>
+				</StackLayout>
+			</AbsoluteLayout>
+		</StackLayout>
+
+	</AbsoluteLayout>
 
 </ContentPage>

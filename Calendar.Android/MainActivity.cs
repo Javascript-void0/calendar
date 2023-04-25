@@ -15,8 +15,20 @@ namespace Calendar.Droid
         {
 			base.OnCreate(savedInstanceState);
 
-            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+			Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
+		    // https://stackoverflow.com/a/59377978
+			if (Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat)
+			{
+				// for covering the full screen in android..
+				Window.SetFlags(WindowManagerFlags.LayoutNoLimits, WindowManagerFlags.LayoutNoLimits);
+
+				// clear FLAG_TRANSLUCENT_STATUS flag:
+				Window.ClearFlags(WindowManagerFlags.TranslucentStatus);
+
+				Window.SetStatusBarColor(Android.Graphics.Color.Transparent);
+			}
 
 			LoadApplication(new App());
             Window.SetStatusBarColor(Android.Graphics.Color.Argb(255, 32, 32, 32));
