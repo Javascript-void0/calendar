@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Calendar
 {
@@ -21,6 +24,8 @@ namespace Calendar
 		private const string dbPath = "CalendarEvents.json";
 		private List<Event> events;
 
+		private const int windowHeight = 565;
+
 		public MainPage()
 		{
 			InitializeComponent();
@@ -30,7 +35,11 @@ namespace Calendar
 			currMonth = now.Month;
 			GenerateGrid();
 
-			eventWindow.TranslationY = 565;
+			eventWindow.TranslationY = windowHeight;
+			AbsoluteLayout.SetLayoutBounds(eventWindow, new Rectangle(0, 1, 1, windowHeight));
+			settingsWindow.TranslationY = windowHeight;
+			AbsoluteLayout.SetLayoutBounds(settingsWindow, new Rectangle(0, 1, 1, windowHeight));
+			settingsIcon.Source = ImageSource.FromResource("Calendar.Images.menu.png");
 		}
 
 		private void ClearGrid()
@@ -60,6 +69,7 @@ namespace Calendar
 
 			var n = prevDaysInMonth - dayOfWeek + 1; // start?
 			var numEvents = 0;
+			var monthEvents = new Dictionary<string, int>();
 			for (var r = 0; r < 6; r++)
 			{
 				for (var c = 0; c < 7; c++)
@@ -71,7 +81,7 @@ namespace Calendar
 					var gridIndex = r * 7 + c;
 					var label = new Label { Text = "" + n };
 
-					if (n == now.Day && currMonth == now.Month && currYear == now.Year)
+					if (n == now.Day && currMonth == now.Month && currYear == now.Year && inMonth)
 						label.SetDynamicResource(Label.StyleProperty, "today");
 					// highlight current week
 					else if (n >= now.Day - (int)now.DayOfWeek && n < now.Day - (int)now.DayOfWeek + 7 && inMonth && currMonth == now.Month && currYear == now.Year)
@@ -88,8 +98,7 @@ namespace Calendar
 						var tapGestureRecognizer = new TapGestureRecognizer();
 						tapGestureRecognizer.Tapped += (s, e) =>
 						{
-							ToggleWindow(dt.ToString("dddd, MMMM d"), hasEvent(dt));
-							if (hasEvent(dt))
+							if (findEvent(dt) != null)
 							{
 								eventDetails.Text = getEvent(dt).info;
 								deleteButton.IsVisible = true;
@@ -99,13 +108,15 @@ namespace Calendar
 								eventDetails.Text = "";
 								deleteButton.IsVisible = false;
 							}
+							ToggleWindow(dt.ToString("dddd, MMMM d"), findEvent(dt) != null);
 							currDay = dt.Day;
 						};
 						square.GestureRecognizers.Add(tapGestureRecognizer);
 
 						// count + display events
-						
-						if (hasEvent(dt))
+
+						var ev = findEvent(dt);
+						if (ev != null)
 						{
 							var circle = new BoxView() { HeightRequest = 5, WidthRequest = 5 };
 							AbsoluteLayout.SetLayoutBounds(circle, new Rectangle(0.5, 0.9, 0.1, 0.1));
@@ -113,6 +124,17 @@ namespace Calendar
 							circle.SetDynamicResource(BoxView.StyleProperty, "event");
 							square.Children.Add(circle);
 							numEvents++;
+							if (monthEvents.ContainsKey(ev))
+							{
+								monthEvents[ev] += 1;
+							}
+							else
+							{
+								monthEvents.Add(ev, 1);
+							}
+
+							if (dt.Day == now.Day && dt.Month == now.Month && dt.Year == now.Year)
+								todayEvent.Text = ev;
 						}
 					}
 
@@ -127,15 +149,31 @@ namespace Calendar
 					grid.Children.Add(square);
 				}
 			}
-			totalEvents.Text = "" + numEvents;
+
+			stats.Children.Clear();
+			var stackLayout = new StackLayout() { Orientation = StackOrientation.Horizontal };
+			var info = new Label() { Text = "Total Events: ", FontSize = 20, HorizontalOptions = LayoutOptions.StartAndExpand };
+			var value = new Label() { Text = "" + numEvents, FontSize = 20, HorizontalOptions = LayoutOptions.End };
+			stackLayout.Children.Add(info);
+			stackLayout.Children.Add(value);
+			stats.Children.Add(stackLayout);
+			foreach (KeyValuePair<string, int> x in monthEvents)
+			{
+				stackLayout = new StackLayout() { Orientation = StackOrientation.Horizontal };
+				info = new Label() { Text = "- " + x.Key, FontSize = 20, HorizontalOptions = LayoutOptions.StartAndExpand };
+				value = new Label() { Text = "" + x.Value, FontSize = 20, HorizontalOptions = LayoutOptions.End };
+				stackLayout.Children.Add(info);
+				stackLayout.Children.Add(value);
+				stats.Children.Add(stackLayout);
+			}
 		}
 
-		private bool hasEvent(DateTime dt)
+		private string findEvent(DateTime dt)
 		{
 			for (var i = 0; i < events.Count; i++)
 				if (events[i].Equals(dt))
-					return true;
-			return false;
+					return events[i].info;
+			return null;
 		}
 
 		private Event getEvent(DateTime dt)
@@ -198,7 +236,7 @@ namespace Calendar
 				eventDetails.IsEnabled = false;
 				eventDetails.IsEnabled = true;
 				// animation
-				await eventWindow.TranslateTo(0, 565, t, Easing.CubicInOut);
+				await eventWindow.TranslateTo(0, windowHeight, t, Easing.CubicOut);
 
 				// hide
 				eventWindow.IsVisible = false;
@@ -221,13 +259,16 @@ namespace Calendar
 
 				// animation
 				eventDetails.Focus();
-				await eventWindow.TranslateTo(0, 0, t, Easing.CubicInOut);
+				Console.WriteLine(eventDetails.Text);
+				if (eventDetails.Text != null)
+					eventDetails.CursorPosition = eventDetails.Text.Length;
+				await eventWindow.TranslateTo(0, 0, t, Easing.CubicOut);
 			}
 		}
 
 		private void CloseEventWindow(object sender, EventArgs e)
 		{
-			ToggleWindow();
+			CloseWindows(null, null);
 		}
 
 		public static string DatabasePath
@@ -267,7 +308,7 @@ namespace Calendar
 				DeleteEvent(null, null);
 				return;
 			}
-			else if (hasEvent(dt)) // existing event, update
+			else if (findEvent(dt) != null) // existing event, update
 			{
 				DeleteEvent(null, null);
 				var d = new Event(currYear, currMonth, currDay, eventDetails.Text);
@@ -294,6 +335,42 @@ namespace Calendar
 			SaveEvents();
 			ToggleWindow();
 			GenerateGrid();
+		}
+
+		private void CloseSettings(object sender, EventArgs e)
+		{
+			ToggleSettings();
+		}
+
+		private async void ToggleSettings()
+		{
+			var t = (uint)200;
+			if (settingsWindow.IsVisible)
+			{
+				// hide
+				await settingsWindow.TranslateTo(0, windowHeight, t, Easing.CubicOut);
+				settingsWindow.IsVisible = false;
+				settingsWindow.InputTransparent = true;
+				dim.IsVisible = false;
+				dim.InputTransparent = true;
+			}
+			else
+			{
+				// show
+				settingsWindow.IsVisible = true;
+				settingsWindow.InputTransparent = false;
+				dim.IsVisible = true;
+				dim.InputTransparent = false;
+				await settingsWindow.TranslateTo(0, 0, t, Easing.CubicOut);
+			}
+		}
+
+		private void CloseWindows(object sender, EventArgs e)
+		{
+			if (settingsWindow.IsVisible)
+				ToggleSettings();
+			if (eventWindow.IsVisible)
+				ToggleWindow();
 		}
 	}
 }

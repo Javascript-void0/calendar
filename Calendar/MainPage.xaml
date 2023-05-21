@@ -112,10 +112,20 @@
 			<BoxView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HeightRequest="2" BackgroundColor="Gray" Margin="35, 25, 35, 10" CornerRadius="5"/>
 
 			<!--bottom half-->
-			<StackLayout Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="stats" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" Margin="25">
-				<StackLayout Orientation="Horizontal">
-					<Label Text="Total Events: " FontSize="20" HorizontalOptions="StartAndExpand"/>
-					<Label x:Name="totalEvents" Text="0" FontSize="20" HorizontalOptions="End"/>
+			<StackLayout x:Name="bottom" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" Margin="25, 0">
+				<StackLayout>
+					<Label Text="Scheduled Today: " FontSize="35" HorizontalOptions="Center"/>
+					<StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+						<Label Text="&quot;" FontSize="25" FontFamily="EnvyCodeR"/>
+						<Label x:Name="todayEvent" Text="No event scheduled for today" FontSize="25" Padding="0, 0, 0, 35"/>
+						<Label Text="&quot;" FontSize="25" FontFamily="EnvyCodeR"/>
+					</StackLayout>
+				</StackLayout>
+				<StackLayout x:Name="stats">
+					<StackLayout Orientation="Horizontal">
+						<Label Text="Total Events: " FontSize="20" HorizontalOptions="StartAndExpand"/>
+						<Label x:Name="totalEvents" Text="0" FontSize="20" HorizontalOptions="End"/>
+					</StackLayout>
 				</StackLayout>
 			</StackLayout>
 
@@ -131,18 +141,24 @@
 				</BoxView.GestureRecognizers>
 			</BoxView>
 
+			<!--settings button-->
+			<ImageButton x:Name="settingsIcon" Grid.Row="3" Grid.Column="1" Margin="35, 60"
+						 HeightRequest="50" WidthRequest="50"
+						 HorizontalOptions="End" VerticalOptions="End" 
+						 BackgroundColor="Transparent" Clicked="CloseSettings"/>
+
 		</Grid>
 
 		<!--background dim-->
 		<BoxView x:Name="dim" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All"
 				 BackgroundColor="#80000000" InputTransparent="True" IsVisible="False">
 			<BoxView.GestureRecognizers>
-				<TapGestureRecognizer Tapped="CloseEventWindow"/>
+				<TapGestureRecognizer Tapped="CloseWindows"/>
 			</BoxView.GestureRecognizers>
 		</BoxView>
 
 		<!--input window for new event-->
-		<StackLayout x:Name="eventWindow" AbsoluteLayout.LayoutBounds="0, 1, 1, 565" AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional"
+		<StackLayout x:Name="eventWindow" AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional"
 					 IsVisible="false" InputTransparent="True">
 			<AbsoluteLayout HeightRequest="1000">
 				<BoxView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#202020" CornerRadius="30, 30, 0, 0"/>
@@ -155,9 +171,58 @@
 						<Entry x:Name="eventDetails" Placeholder="Event" TextColor="{DynamicResource BackgroundColor}" PlaceholderColor="Gray" HorizontalOptions="FillAndExpand"/>
 						<StackLayout Orientation="Horizontal" HorizontalOptions="End">
 							<Button x:Name="saveButton" Text="save" WidthRequest="70" HorizontalOptions="End" Clicked="SaveEvent"/>
-							<Button x:Name="deleteButton" Text="delete" WidthRequest="90" HorizontalOptions="End" Clicked="DeleteEvent" IsVisible="false"/>
+							<Button x:Name="deleteButton" TextColor="#8b4049" Text="delete" WidthRequest="90" HorizontalOptions="End" Clicked="DeleteEvent" IsVisible="false"/>
 						</StackLayout>
 					</StackLayout>
+				</StackLayout>
+			</AbsoluteLayout>
+		</StackLayout>
+
+		<!--settings window-->
+		<StackLayout x:Name="settingsWindow" AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional"
+					 IsVisible="false" InputTransparent="True">
+			<AbsoluteLayout HeightRequest="1000">
+				<BoxView AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#202020" CornerRadius="30, 30, 0, 0"/>
+				<StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+					<StackLayout Padding="30, 30, 30, 0" Orientation="Horizontal">
+						<Label Text="Menu" FontSize="20" Padding="20, 15" HorizontalOptions="StartAndExpand"/>
+						<Button Text="x" HorizontalOptions="End" WidthRequest="60" FontFamily="SpaceGrotesk" Clicked="CloseSettings"/>
+					</StackLayout>
+					
+					<BoxView HeightRequest="2" BackgroundColor="Gray" Margin="35, 10, 35, 10" CornerRadius="5"/>
+					
+					<StackLayout Margin="50, 15">
+						<StackLayout Orientation="Horizontal">
+							<Label Text="Setting 1" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+							<CheckBox Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
+						</StackLayout>
+						<StackLayout Orientation="Horizontal">
+							<Label Text="Setting 2" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+							<CheckBox Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
+						</StackLayout>
+						<StackLayout Orientation="Horizontal">
+							<Label Text="Setting 3" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+							<CheckBox Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
+						</StackLayout>
+						<StackLayout Orientation="Horizontal">
+							<Label Text="Setting 4" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+							<CheckBox Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
+						</StackLayout>
+						<StackLayout Orientation="Horizontal">
+							<Label Text="Setting 5" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+							<CheckBox Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
+						</StackLayout>
+						<StackLayout Orientation="Horizontal">
+							<Label Text="Setting 6" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+							<CheckBox Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
+						</StackLayout>
+						<!--<Entry x:Name="eventDetails" Placeholder="Event" TextColor="{DynamicResource BackgroundColor}" PlaceholderColor="Gray" HorizontalOptions="FillAndExpand"/>-->
+					</StackLayout>
+
+					<BoxView HeightRequest="2" BackgroundColor="Gray" Margin="35, 10, 35, 10" CornerRadius="5"/>
+
+					<Button Margin="50, 0" x:Name="menuSaveButton" Text="save*" WidthRequest="76" HorizontalOptions="End" Clicked="SaveEvent"/>
+
 				</StackLayout>
 			</AbsoluteLayout>
 		</StackLayout>
