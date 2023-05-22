@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using static System.Net.Mime.MediaTypeNames;
+using Xamarin.Essentials;
 
 namespace Calendar
 {
@@ -23,8 +23,10 @@ namespace Calendar
 
 		private const string dbPath = "CalendarEvents.json";
 		private List<Event> events;
+		private List<StackLayout> windows = new List<StackLayout>();
 
 		private const int windowHeight = 565;
+		private const uint animationTime = (uint)200;
 
 		public MainPage()
 		{
@@ -35,10 +37,16 @@ namespace Calendar
 			currMonth = now.Month;
 			GenerateGrid();
 
-			eventWindow.TranslationY = windowHeight;
-			AbsoluteLayout.SetLayoutBounds(eventWindow, new Rectangle(0, 1, 1, windowHeight));
-			settingsWindow.TranslationY = windowHeight;
-			AbsoluteLayout.SetLayoutBounds(settingsWindow, new Rectangle(0, 1, 1, windowHeight));
+			windows.Add(settingsWindow);
+			windows.Add(eventWindow);
+			windows.Add(listWindow);
+
+			foreach (StackLayout s in windows)
+			{
+				s.TranslationY = windowHeight;
+				AbsoluteLayout.SetLayoutBounds(s, new Rectangle(0, 1, 1, windowHeight));
+			}
+			 
 			settingsIcon.Source = ImageSource.FromResource("Calendar.Images.menu.png");
 		}
 
@@ -108,7 +116,7 @@ namespace Calendar
 								eventDetails.Text = "";
 								deleteButton.IsVisible = false;
 							}
-							ToggleWindow(dt.ToString("dddd, MMMM d"), findEvent(dt) != null);
+							ToggleEventWindow(dt.ToString("dddd, MMMM d"), findEvent(dt) != null);
 							currDay = dt.Day;
 						};
 						square.GestureRecognizers.Add(tapGestureRecognizer);
@@ -192,7 +200,6 @@ namespace Calendar
 				currMonth = 12;
 				currYear--;
 			}
-			ToggleWindow();
 			GenerateGrid();
 		}
 
@@ -204,7 +211,6 @@ namespace Calendar
 				currMonth = 1;
 				currYear++;
 			}
-			ToggleWindow();
 			GenerateGrid();
 		}
 
@@ -217,26 +223,15 @@ namespace Calendar
 			GenerateGrid();
 		}
 
-		private void SwipePrevMonth(object sender, SwipedEventArgs e)
+		private async void ToggleEventWindow(String date = null, bool exist = false)
 		{
-			PrevMonth(null, null);
-		}
-
-		private void SwipeNextMonth(object sender, SwipedEventArgs e)
-		{
-			NextMonth(null, null);
-		}
-
-		private async void ToggleWindow(String date = null, bool exist = false)
-		{
-			var t = (uint)200;
 			if (date == null)
 			{
 				// hide keyboard
 				eventDetails.IsEnabled = false;
 				eventDetails.IsEnabled = true;
 				// animation
-				await eventWindow.TranslateTo(0, windowHeight, t, Easing.CubicOut);
+				await eventWindow.TranslateTo(0, windowHeight, animationTime, Easing.CubicOut);
 
 				// hide
 				eventWindow.IsVisible = false;
@@ -246,6 +241,7 @@ namespace Calendar
 			}
 			else
 			{
+				HapticFeedback.Perform(HapticFeedbackType.Click);
 				// unhide
 				eventWindow.IsVisible = true;
 				eventWindow.InputTransparent = false;
@@ -262,13 +258,8 @@ namespace Calendar
 				Console.WriteLine(eventDetails.Text);
 				if (eventDetails.Text != null)
 					eventDetails.CursorPosition = eventDetails.Text.Length;
-				await eventWindow.TranslateTo(0, 0, t, Easing.CubicOut);
+				await eventWindow.TranslateTo(0, 0, animationTime, Easing.CubicOut);
 			}
-		}
-
-		private void CloseEventWindow(object sender, EventArgs e)
-		{
-			CloseWindows(null, null);
 		}
 
 		public static string DatabasePath
@@ -305,12 +296,12 @@ namespace Calendar
 			var dt = new DateTime(currYear, currMonth, currDay);
 			if (eventDetails.Text == null)
 			{
-				DeleteEvent(null, null);
+				DeleteEvent();
 				return;
 			}
 			else if (findEvent(dt) != null) // existing event, update
 			{
-				DeleteEvent(null, null);
+				DeleteEvent();
 				var d = new Event(currYear, currMonth, currDay, eventDetails.Text);
 				events.Add(d);
 			}
@@ -320,11 +311,11 @@ namespace Calendar
 				events.Add(d);
 			}
 			SaveEvents();
-			ToggleWindow();
+			ToggleEventWindow();
 			GenerateGrid();
 		}
 
-		private void DeleteEvent(object sender, EventArgs e)
+		private void DeleteEvent(object sender = null, EventArgs e = null)
 		{
 			for (var i = events.Count - 1; i > 0; i--)
 			{
@@ -333,22 +324,68 @@ namespace Calendar
 					events.RemoveAt(i);
 			}
 			SaveEvents();
-			ToggleWindow();
+			ToggleEventWindow();
 			GenerateGrid();
 		}
 
-		private void CloseSettings(object sender, EventArgs e)
+		private void CloseWindows(object sender = null, EventArgs e = null)
 		{
-			ToggleSettings();
+			if (settingsWindow.IsVisible)
+				ToggleSettingsWindow();
+			if (eventWindow.IsVisible)
+				ToggleEventWindow();
+			if (listWindow.IsVisible)
+				ToggleListWindow();
 		}
 
-		private async void ToggleSettings()
+		private void DragStarting(object sender, DragStartingEventArgs e)
 		{
-			var t = (uint)200;
+			try
+			{
+				//var duration = TimeSpan.FromSeconds(0.1);
+				//Vibration.Vibrate(duration);
+				HapticFeedback.Perform(HapticFeedbackType.LongPress);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+			}
+			ToggleListWindow();
+			 
+		}
+
+		private async void ToggleListWindow()
+		{
+			if (listWindow.IsVisible)
+			{
+				// hide
+				await listWindow.TranslateTo(0, windowHeight, animationTime, Easing.CubicOut);
+				listWindow.IsVisible = false;
+				listWindow.InputTransparent = true;
+				dim.IsVisible = false;
+				dim.InputTransparent = true;
+			}
+			else
+			{
+				// show
+				listWindow.IsVisible = true;
+				listWindow.InputTransparent = false;
+				dim.IsVisible = true;
+				dim.InputTransparent = false;
+				await listWindow.TranslateTo(0, 0, animationTime, Easing.CubicOut);
+			}
+		}
+
+		private async void ToggleSettingsWindow(object sender = null, EventArgs e = null)
+		{
+			// pressed button
+			if (sender != null)
+				HapticFeedback.Perform(HapticFeedbackType.Click);
+
 			if (settingsWindow.IsVisible)
 			{
 				// hide
-				await settingsWindow.TranslateTo(0, windowHeight, t, Easing.CubicOut);
+				await settingsWindow.TranslateTo(0, windowHeight, animationTime, Easing.CubicOut);
 				settingsWindow.IsVisible = false;
 				settingsWindow.InputTransparent = true;
 				dim.IsVisible = false;
@@ -361,16 +398,13 @@ namespace Calendar
 				settingsWindow.InputTransparent = false;
 				dim.IsVisible = true;
 				dim.InputTransparent = false;
-				await settingsWindow.TranslateTo(0, 0, t, Easing.CubicOut);
+				await settingsWindow.TranslateTo(0, 0, animationTime, Easing.CubicOut);
 			}
 		}
 
-		private void CloseWindows(object sender, EventArgs e)
+		private void SwipeDown(object sender, SwipedEventArgs e)
 		{
-			if (settingsWindow.IsVisible)
-				ToggleSettings();
-			if (eventWindow.IsVisible)
-				ToggleWindow();
+			CloseWindows();
 		}
 	}
 }
