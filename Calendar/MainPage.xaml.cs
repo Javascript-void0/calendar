@@ -126,8 +126,14 @@ namespace Calendar
 						var ev = findEvent(dt);
 						if (ev != null)
 						{
+							// split different events by ', '
+							ev = ev.Replace(", ", ",");
+							var splitMultiple = ev.Split(',');
+
+							numEvents += splitMultiple.Length;
+
 							// draw circle if fits filter
-							if (filterEvent == null || filterEvent == ev)
+							if (filterEvent == null || splitMultiple.Contains(filterEvent))
 							{
 								var circle = new BoxView() { HeightRequest = 5, WidthRequest = 5 };
 								AbsoluteLayout.SetLayoutBounds(circle, new Rectangle(0.5, 0.9, 0.1, 0.1));
@@ -135,14 +141,14 @@ namespace Calendar
 								circle.SetDynamicResource(BoxView.StyleProperty, "event");
 								square.Children.Add(circle);
 							}
-							numEvents++;
-							if (monthEvents.ContainsKey(ev))
+
+							// count keys
+							foreach (var e in splitMultiple)
 							{
-								monthEvents[ev] += 1;
-							}
-							else
-							{
-								monthEvents.Add(ev, 1);
+								if (monthEvents.ContainsKey(e))
+									monthEvents[e] += 1;
+								else
+									monthEvents.Add(e, 1);
 							}
 
 							if (dt.Day == now.Day && dt.Month == now.Month && dt.Year == now.Year)
@@ -184,24 +190,6 @@ namespace Calendar
 				};
 				listEvents.Children.Add(b);
 			}
-
-			//stats.Children.Clear();
-			//var stackLayout = new StackLayout() { Orientation = StackOrientation.Horizontal };
-			//var info = new Label() { Text = "Total Events: ", FontSize = 20, HorizontalOptions = LayoutOptions.StartAndExpand };
-			//var value = new Label() { Text = "" + numEvents, FontSize = 20, HorizontalOptions = LayoutOptions.End };
-			//stackLayout.Children.Add(info);
-			//stackLayout.Children.Add(value);
-			//stats.Children.Add(stackLayout);
-			//foreach (KeyValuePair<string, int> x in monthEvents)
-			//{
-			//	stackLayout = new StackLayout() { Orientation = StackOrientation.Horizontal };
-			//	info = new Label() { Text = "- " + x.Key, FontSize = 20, HorizontalOptions = LayoutOptions.StartAndExpand };
-			//	value = new Label() { Text = "" + x.Value, FontSize = 20, HorizontalOptions = LayoutOptions.End };
-			//	stackLayout.Children.Add(info);
-			//	stackLayout.Children.Add(value);
-			//	stats.Children.Add(stackLayout);
-			//}
-			//< Button Text = "nitro (1)" Background = "#20ffffff" Padding = "20, 0" Margin = "5" FontFamily = "SpaceGrotesk" />
 
 		}
 
@@ -371,8 +359,6 @@ namespace Calendar
 		{
 			try
 			{
-				//var duration = TimeSpan.FromSeconds(0.1);
-				//Vibration.Vibrate(duration);
 				HapticFeedback.Perform(HapticFeedbackType.LongPress);
 			}
 			catch (Exception ex)
@@ -434,6 +420,28 @@ namespace Calendar
 		private void SwipeDown(object sender, SwipedEventArgs e)
 		{
 			CloseWindows();
+		}
+
+		protected override bool OnBackButtonPressed()
+		{
+			// close window with back button
+			if (settingsWindow.IsVisible)
+			{
+				ToggleSettingsWindow();
+				return true;
+			}
+			if (eventWindow.IsVisible)
+			{
+				ToggleEventWindow();
+				return true;
+			}
+			if (listWindow.IsVisible)
+			{
+				ToggleListWindow();
+				return true;
+			}
+			// none open, default behavior
+			return false;
 		}
 	}
 }
