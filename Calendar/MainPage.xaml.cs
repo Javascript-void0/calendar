@@ -61,7 +61,7 @@ namespace Calendar
 			}
 		}
 
-		private void GenerateGrid()
+		private void GenerateGrid(string filterEvent = null)
 		{
 			ClearGrid();
 
@@ -126,11 +126,15 @@ namespace Calendar
 						var ev = findEvent(dt);
 						if (ev != null)
 						{
-							var circle = new BoxView() { HeightRequest = 5, WidthRequest = 5 };
-							AbsoluteLayout.SetLayoutBounds(circle, new Rectangle(0.5, 0.9, 0.1, 0.1));
-							AbsoluteLayout.SetLayoutFlags(circle, AbsoluteLayoutFlags.All);
-							circle.SetDynamicResource(BoxView.StyleProperty, "event");
-							square.Children.Add(circle);
+							// draw circle if fits filter
+							if (filterEvent == null || filterEvent == ev)
+							{
+								var circle = new BoxView() { HeightRequest = 5, WidthRequest = 5 };
+								AbsoluteLayout.SetLayoutBounds(circle, new Rectangle(0.5, 0.9, 0.1, 0.1));
+								AbsoluteLayout.SetLayoutFlags(circle, AbsoluteLayoutFlags.All);
+								circle.SetDynamicResource(BoxView.StyleProperty, "event");
+								square.Children.Add(circle);
+							}
 							numEvents++;
 							if (monthEvents.ContainsKey(ev))
 							{
@@ -147,7 +151,7 @@ namespace Calendar
 					}
 
 					n++;
-					
+
 					if ((n > prevDaysInMonth && !inMonth) || (n > daysInMonth && inMonth))
 					{
 						n = 1;
@@ -158,22 +162,47 @@ namespace Calendar
 				}
 			}
 
-			stats.Children.Clear();
-			var stackLayout = new StackLayout() { Orientation = StackOrientation.Horizontal };
-			var info = new Label() { Text = "Total Events: ", FontSize = 20, HorizontalOptions = LayoutOptions.StartAndExpand };
-			var value = new Label() { Text = "" + numEvents, FontSize = 20, HorizontalOptions = LayoutOptions.End };
-			stackLayout.Children.Add(info);
-			stackLayout.Children.Add(value);
-			stats.Children.Add(stackLayout);
+			listEvents.Children.Clear();
+			Button b = new Button() { Text = "All Events (" + numEvents + ")" };
+			b.SetDynamicResource(Label.StyleProperty, "filterButton");
+			b.Clicked += (s, e) =>
+			{
+				GenerateGrid();
+				CloseWindows();
+			};
+			listEvents.Children.Add(b);
+
 			foreach (KeyValuePair<string, int> x in monthEvents)
 			{
-				stackLayout = new StackLayout() { Orientation = StackOrientation.Horizontal };
-				info = new Label() { Text = "- " + x.Key, FontSize = 20, HorizontalOptions = LayoutOptions.StartAndExpand };
-				value = new Label() { Text = "" + x.Value, FontSize = 20, HorizontalOptions = LayoutOptions.End };
-				stackLayout.Children.Add(info);
-				stackLayout.Children.Add(value);
-				stats.Children.Add(stackLayout);
+				b = new Button() { Text = x.Key + " (" + x.Value + ")", BindingContext=x.Key };
+				b.SetDynamicResource(Label.StyleProperty, "filterButton");
+				b.Clicked += (s, e) =>
+				{
+					var filter = ((Button)s).BindingContext.ToString();
+					GenerateGrid(filter);
+					CloseWindows();
+				};
+				listEvents.Children.Add(b);
 			}
+
+			//stats.Children.Clear();
+			//var stackLayout = new StackLayout() { Orientation = StackOrientation.Horizontal };
+			//var info = new Label() { Text = "Total Events: ", FontSize = 20, HorizontalOptions = LayoutOptions.StartAndExpand };
+			//var value = new Label() { Text = "" + numEvents, FontSize = 20, HorizontalOptions = LayoutOptions.End };
+			//stackLayout.Children.Add(info);
+			//stackLayout.Children.Add(value);
+			//stats.Children.Add(stackLayout);
+			//foreach (KeyValuePair<string, int> x in monthEvents)
+			//{
+			//	stackLayout = new StackLayout() { Orientation = StackOrientation.Horizontal };
+			//	info = new Label() { Text = "- " + x.Key, FontSize = 20, HorizontalOptions = LayoutOptions.StartAndExpand };
+			//	value = new Label() { Text = "" + x.Value, FontSize = 20, HorizontalOptions = LayoutOptions.End };
+			//	stackLayout.Children.Add(info);
+			//	stackLayout.Children.Add(value);
+			//	stats.Children.Add(stackLayout);
+			//}
+			//< Button Text = "nitro (1)" Background = "#20ffffff" Padding = "20, 0" Margin = "5" FontFamily = "SpaceGrotesk" />
+
 		}
 
 		private string findEvent(DateTime dt)

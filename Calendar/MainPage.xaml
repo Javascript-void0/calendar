@@ -43,6 +43,13 @@
 			<Setter Property="BackgroundColor" Value="#9cbbd9"/>
 			<Setter Property="CornerRadius" Value="100"/>
 		</Style>
+
+		<Style x:Key="filterButton" TargetType="Button">
+			<Setter Property="Background" Value="#20ffffff"/>
+			<Setter Property="Padding" Value="20, 0"/>
+			<Setter Property="Margin" Value="5"/>
+			<Setter Property="FontFamily" Value="SpaceGrotesk"/>
+		</Style>
 	</ContentPage.Resources>
 
 	<AbsoluteLayout>
@@ -163,7 +170,7 @@
 						<Button Text="x" HorizontalOptions="End" WidthRequest="60" FontFamily="SpaceGrotesk" Clicked="CloseWindows"/>
 					</StackLayout>
 					<StackLayout Margin="35, 15">
-						<Entry x:Name="eventDetails" Placeholder="Event" TextColor="{DynamicResource BackgroundColor}" PlaceholderColor="Gray" HorizontalOptions="FillAndExpand"/>
+						<Entry x:Name="eventDetails" Placeholder="Event" TextColor="White" PlaceholderColor="Gray" HorizontalOptions="FillAndExpand"/>
 						<StackLayout Orientation="Horizontal" HorizontalOptions="End">
 							<Button x:Name="saveButton" Text="save" WidthRequest="70" HorizontalOptions="End" Clicked="SaveEvent"/>
 							<Button x:Name="deleteButton" TextColor="#8b4049" Text="delete" WidthRequest="90" HorizontalOptions="End" Clicked="DeleteEvent" IsVisible="false"/>
@@ -178,32 +185,49 @@
 					 IsVisible="false" InputTransparent="True">
 			<AbsoluteLayout HeightRequest="1000">
 
+				<!--TODO: FIX-->
 				<BoxView AbsoluteLayout.LayoutBounds="0, 0, 0.5, 1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#202020" CornerRadius="30, 0, 0, 0">
 					<BoxView.GestureRecognizers>
 						<TapGestureRecognizer Tapped="PrevMonth"/>
-						<SwipeGestureRecognizer Direction="Down" Swiped="SwipeDown"/>
+						<!--<SwipeGestureRecognizer Direction="Down" Swiped="SwipeDown"/>-->
 					</BoxView.GestureRecognizers>
 				</BoxView>
 				<BoxView AbsoluteLayout.LayoutBounds="1, 0, 0.5, 1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#202020" CornerRadius="0, 30, 0, 0">
 					<BoxView.GestureRecognizers>
 						<TapGestureRecognizer Tapped="NextMonth"/>
-						<SwipeGestureRecognizer Direction="Down" Swiped="SwipeDown"/>
+						<!--<SwipeGestureRecognizer Direction="Down" Swiped="SwipeDown"/>-->
 					</BoxView.GestureRecognizers>
 				</BoxView>
 
-				<StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" InputTransparent="True">
+				<StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
 					<StackLayout Padding="30, 30, 30, 0" Orientation="Horizontal">
 						<Label Text="Overview" FontSize="20" Padding="20, 15" HorizontalOptions="StartAndExpand"/>
 						<Button Text="x" HorizontalOptions="End" WidthRequest="60" FontFamily="SpaceGrotesk" Clicked="CloseWindows"/>
 					</StackLayout>
+
+					<BoxView HeightRequest="2" BackgroundColor="Gray" Margin="35, 10, 35, 10" CornerRadius="5"/>
+					
 					<StackLayout Margin="35, 15">
-						<StackLayout x:Name="stats">
+						<!--<Entry x:Name="eventSearch" Placeholder="Search" TextColor="White" PlaceholderColor="Gray" HorizontalOptions="FillAndExpand"/>-->
+						<FlexLayout x:Name="listEvents" Wrap="Wrap" JustifyContent="Center" AlignItems="Center">
+							<!--<Button Text="All Events (20)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>
+							<Button Text="worky (18)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>
+							<Button Text="mid (1)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>
+							<Button Text="nitro (1)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>
+							<Button Text="awefawef (1)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>
+							<Button Text="aesdwewefwefwefwefwefwefee (1)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>
+							<Button Text="nitro (1)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>-->
+						</FlexLayout>
+						<!--<StackLayout x:Name="stats">
 							<StackLayout Orientation="Horizontal">
 								<Label Text="Total Events: " FontSize="20" HorizontalOptions="StartAndExpand"/>
 								<Label x:Name="totalEvents" Text="0" FontSize="20" HorizontalOptions="End"/>
 							</StackLayout>
-						</StackLayout>
+						</StackLayout>-->
 					</StackLayout>
+					
+					<BoxView HeightRequest="2" BackgroundColor="Gray" Margin="35, 10, 35, 10" CornerRadius="5"/>
+				
 				</StackLayout>
 			</AbsoluteLayout>
 		</StackLayout>
