@@ -135,11 +135,14 @@ namespace Calendar
 							// draw circle if fits filter
 							if (filterEvent == null || splitMultiple.Contains(filterEvent))
 							{
-								var circle = new BoxView() { HeightRequest = 5, WidthRequest = 5 };
-								AbsoluteLayout.SetLayoutBounds(circle, new Rectangle(0.5, 0.9, 0.1, 0.1));
-								AbsoluteLayout.SetLayoutFlags(circle, AbsoluteLayoutFlags.All);
-								circle.SetDynamicResource(BoxView.StyleProperty, "event");
-								square.Children.Add(circle);
+								for (var x = 0; x < splitMultiple.Length; x++)
+								{
+									var circle = new BoxView() { HeightRequest = 5, WidthRequest = 5 };
+									AbsoluteLayout.SetLayoutBounds(circle, new Rectangle(1.0 / (splitMultiple.Length + 1) * (x + 1), 0.9, 0.1, 0.1));
+									AbsoluteLayout.SetLayoutFlags(circle, AbsoluteLayoutFlags.All);
+									circle.SetDynamicResource(BoxView.StyleProperty, "event");
+									square.Children.Add(circle);
+								}
 							}
 
 							// count keys
@@ -169,7 +172,7 @@ namespace Calendar
 			}
 
 			listEvents.Children.Clear();
-			Button b = new Button() { Text = "All Events (" + numEvents + ")" };
+			Button b = new Button() { Text = "All Events [" + numEvents + "]" };
 			b.SetDynamicResource(Label.StyleProperty, "filterButton");
 			b.Clicked += (s, e) =>
 			{
@@ -180,7 +183,7 @@ namespace Calendar
 
 			foreach (KeyValuePair<string, int> x in monthEvents)
 			{
-				b = new Button() { Text = x.Key + " (" + x.Value + ")", BindingContext=x.Key };
+				b = new Button() { Text = x.Key + " [" + x.Value + "]", BindingContext=x.Key };
 				b.SetDynamicResource(Label.StyleProperty, "filterButton");
 				b.Clicked += (s, e) =>
 				{

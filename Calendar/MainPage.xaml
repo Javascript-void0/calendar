@@ -101,13 +101,11 @@
 				<Label Grid.Row="0" Grid.Column="5" Text="F" Style="{StaticResource dayOfWeek}"/>
 				<Label Grid.Row="0" Grid.Column="6" Text="S" Style="{StaticResource dayOfWeek}"/>
 
-					<!--<AbsoluteLayout Grid.Row="1" Grid.Column="0">
-				<Label Style="{StaticResource today}" Text="0"/>
-			</AbsoluteLayout>
-			<AbsoluteLayout Grid.Row="1" Grid.Column="1">
-				<Label Style="{StaticResource date}" Text="1"/>
-			</AbsoluteLayout>-->
-
+				<AbsoluteLayout Grid.Row="1" Grid.Column="0">
+					<Label/>
+					<BoxView/>
+				</AbsoluteLayout>
+				
 			</Grid>
 
 			<BoxView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HeightRequest="2" BackgroundColor="Gray" Margin="35, 25, 35, 10" CornerRadius="5"/>
@@ -210,20 +208,8 @@
 					<StackLayout Margin="35, 15">
 						<!--<Entry x:Name="eventSearch" Placeholder="Search" TextColor="White" PlaceholderColor="Gray" HorizontalOptions="FillAndExpand"/>-->
 						<FlexLayout x:Name="listEvents" Wrap="Wrap" JustifyContent="Center" AlignItems="Center">
-							<!--<Button Text="All Events (20)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>
-							<Button Text="worky (18)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>
-							<Button Text="mid (1)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>
-							<Button Text="nitro (1)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>
-							<Button Text="awefawef (1)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>
-							<Button Text="aesdwewefwefwefwefwefwefee (1)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>
-							<Button Text="nitro (1)" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>-->
+							<!--<Button Text="test" Background="#20ffffff" Padding="20, 0" Margin="5" FontFamily="SpaceGrotesk"/>-->
 						</FlexLayout>
-						<!--<StackLayout x:Name="stats">
-							<StackLayout Orientation="Horizontal">
-								<Label Text="Total Events: " FontSize="20" HorizontalOptions="StartAndExpand"/>
-								<Label x:Name="totalEvents" Text="0" FontSize="20" HorizontalOptions="End"/>
-							</StackLayout>
-						</StackLayout>-->
 					</StackLayout>
 					
 					<BoxView HeightRequest="2" BackgroundColor="Gray" Margin="35, 10, 35, 10" CornerRadius="5"/>
