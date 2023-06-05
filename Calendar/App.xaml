@@ -3,6 +3,31 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Calendar.App">
     <Application.Resources>
+		<ResourceDictionary>
+			<Color x:Key="Accent1">#40263e</Color>
+			<Color x:Key="Accent2">#663c63</Color>
+			<Color x:Key="Accent3">#a882a6</Color>
 
-    </Application.Resources>
+			<Color x:Key="Theme1_1">#3d5373</Color>
+			<Color x:Key="Theme1_2">#5979a6</Color>
+			<Color x:Key="Theme1_3">#afc4e3</Color>
+
+			<Color x:Key="Theme2_1">#3e5c4d</Color>
+			<Color x:Key="Theme2_2">#57826d</Color>
+			<Color x:Key="Theme2_3">#a5ccb9</Color>
+
+			<Color x:Key="Theme3_1">#232526</Color>
+			<Color x:Key="Theme3_2">#2c2c2c</Color>
+			<Color x:Key="Theme3_3">#c4c4c4</Color>
+
+			<Color x:Key="Theme4_1">#9d4848</Color>
+			<Color x:Key="Theme4_2">#d06060</Color>
+			<Color x:Key="Theme4_3">#e8aeae</Color>
+
+			<Color x:Key="Theme5_1">#40263e</Color>
+			<Color x:Key="Theme5_2">#663c63</Color>
+			<Color x:Key="Theme5_3">#a882a6</Color>
+
+		</ResourceDictionary>
+	</Application.Resources>
 </Application>

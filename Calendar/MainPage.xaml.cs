@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Essentials;
+using static Xamarin.Essentials.AppleSignInAuthenticator;
 
 namespace Calendar
 {
@@ -135,13 +136,18 @@ namespace Calendar
 							// draw circle if fits filter
 							if (filterEvent == null || splitMultiple.Contains(filterEvent))
 							{
-								for (var x = 0; x < splitMultiple.Length; x++)
+								var repeat = splitMultiple.Length;
+								// filter only show one circle
+								if (filterEvent != null)
+									repeat = 1;
+								for (var x = 0; x < repeat; x++)
 								{
 									var circle = new BoxView() { HeightRequest = 5, WidthRequest = 5 };
-									AbsoluteLayout.SetLayoutBounds(circle, new Rectangle(1.0 / (splitMultiple.Length + 1) * (x + 1), 0.9, 0.1, 0.1));
+									AbsoluteLayout.SetLayoutBounds(circle, new Rectangle(1.0 / (repeat + 1) * (x + 1), 0.9, 0.1, 0.1));
 									AbsoluteLayout.SetLayoutFlags(circle, AbsoluteLayoutFlags.All);
 									circle.SetDynamicResource(BoxView.StyleProperty, "event");
 									square.Children.Add(circle);
+									
 								}
 							}
 
@@ -356,6 +362,8 @@ namespace Calendar
 				ToggleEventWindow();
 			if (listWindow.IsVisible)
 				ToggleListWindow();
+			LoadSettings();
+			SetTheme(theme);
 		}
 
 		private void DragStarting(object sender, DragStartingEventArgs e)
@@ -369,7 +377,6 @@ namespace Calendar
 				Console.WriteLine(ex);
 			}
 			ToggleListWindow();
-			 
 		}
 
 		private async void ToggleListWindow()
@@ -428,23 +435,63 @@ namespace Calendar
 		protected override bool OnBackButtonPressed()
 		{
 			// close window with back button
-			if (settingsWindow.IsVisible)
+			if (settingsWindow.IsVisible || eventWindow.IsVisible || listWindow.IsVisible)
 			{
-				ToggleSettingsWindow();
-				return true;
-			}
-			if (eventWindow.IsVisible)
-			{
-				ToggleEventWindow();
-				return true;
-			}
-			if (listWindow.IsVisible)
-			{
-				ToggleListWindow();
+				CloseWindows();
 				return true;
 			}
 			// none open, default behavior
 			return false;
+		}
+
+		private async void OpenGitHub(object sender, EventArgs e)
+		{
+			await Browser.OpenAsync("https://github.com/Javascript-void0/calendar", BrowserLaunchMode.SystemPreferred);
+		}
+
+		private int theme = 5;
+
+		public void LoadSettings()
+		{
+			if (Application.Current.Properties.ContainsKey("Option1"))
+				option1.IsChecked = (bool)Application.Current.Properties["Option1"];
+			if (Application.Current.Properties.ContainsKey("Option2"))
+				option2.IsChecked = (bool)Application.Current.Properties["Option2"];
+			if (Application.Current.Properties.ContainsKey("Option3"))
+				option3.IsChecked = (bool)Application.Current.Properties["Option3"];
+			if (Application.Current.Properties.ContainsKey("Theme"))
+			{
+				theme = (int)Application.Current.Properties["Theme"];
+				SetTheme(theme);
+			}
+
+			menuSaveButton.Text = "save";
+		}
+
+		private void SaveSettings(object sender, EventArgs e)
+		{
+			menuSaveButton.Text = "save";
+			Application.Current.Properties["Option1"] = option1.IsChecked;
+			Application.Current.Properties["Option2"] = option2.IsChecked;
+			Application.Current.Properties["Option3"] = option3.IsChecked;
+			Application.Current.Properties["Theme"] = theme;
+			CloseWindows();
+		}
+
+		private void ThemeChanged(object sender, EventArgs e)
+		{
+			// https://stackoverflow.com/a/53281133
+			Button b = (Button)sender;
+			theme = Int32.Parse(b.BindingContext as string);
+			SetTheme(theme);
+			menuSaveButton.Text = "save*";
+		}
+
+		private void SetTheme(int theme)
+		{
+			Application.Current.Resources["Accent1"] = Application.Current.Resources["Theme" + theme + "_1"];
+			Application.Current.Resources["Accent2"] = Application.Current.Resources["Theme" + theme + "_2"];
+			Application.Current.Resources["Accent3"] = Application.Current.Resources["Theme" + theme + "_3"];
 		}
 	}
 }

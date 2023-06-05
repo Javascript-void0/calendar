@@ -22,10 +22,10 @@
 		</Style>
 		<Style x:Key="today" TargetType="Label" BasedOn="{StaticResource date}">
 			<Setter Property="FontFamily" Value="SpaceGroteskBold"/>
-			<Setter Property="TextColor" Value="#4d749a"/>
+			<Setter Property="TextColor" Value="{DynamicResource Accent1}"/>
 		</Style>
 		<Style x:Key="todayWeek" TargetType="Label" BasedOn="{StaticResource date}">
-			<Setter Property="TextColor" Value="#9cbbd9"/>
+			<Setter Property="TextColor" Value="{DynamicResource Accent2}"/>
 		</Style>
 		<Style x:Key="otherMonth" TargetType="Label" BasedOn="{StaticResource date}">
 			<Setter Property="TextColor" Value="#525252"/>
@@ -40,7 +40,7 @@
 		</Style>
 
 		<Style x:Key="event" TargetType="BoxView">
-			<Setter Property="BackgroundColor" Value="#9cbbd9"/>
+			<Setter Property="BackgroundColor" Value="{DynamicResource Accent3}"/>
 			<Setter Property="CornerRadius" Value="100"/>
 		</Style>
 
@@ -237,38 +237,56 @@
 					<BoxView HeightRequest="2" BackgroundColor="Gray" Margin="35, 10, 35, 10" CornerRadius="5"/>
 
 					<StackLayout Margin="50, 15">
+
+						<Grid Padding="0, 0, 0, 15" HeightRequest="70">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+							<Button Grid.Column="0" BackgroundColor="{StaticResource Theme1_1}" Clicked="ThemeChanged" BindingContext="1" CornerRadius="5"/>
+							<Button Grid.Column="1" BackgroundColor="{StaticResource Theme2_1}" Clicked="ThemeChanged" BindingContext="2" CornerRadius="5"/>
+							<Button Grid.Column="2" BackgroundColor="{StaticResource Theme3_1}" Clicked="ThemeChanged" BindingContext="3" CornerRadius="5"/>
+							<Button Grid.Column="3" BackgroundColor="{StaticResource Theme4_1}" Clicked="ThemeChanged" BindingContext="4" CornerRadius="5"/>
+							<Button Grid.Column="4" BackgroundColor="{StaticResource Theme5_1}" Clicked="ThemeChanged" BindingContext="5" CornerRadius="5"/>
+						</Grid>
+
 						<StackLayout Orientation="Horizontal">
-							<Label Text="Setting 1" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
-							<CheckBox Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
+							<Label Text="Use Light Theme" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+							<CheckBox x:Name="option1" Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
 						</StackLayout>
 						<StackLayout Orientation="Horizontal">
-							<Label Text="Setting 2" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
-							<CheckBox Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
+							<Label Text="Use Swipe Controls" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+							<CheckBox x:Name="option2" Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
 						</StackLayout>
 						<StackLayout Orientation="Horizontal">
-							<Label Text="Setting 3" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
-							<CheckBox Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
+							<Label Text="Disable Animations" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+							<CheckBox x:Name="option3" Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
 						</StackLayout>
-						<StackLayout Orientation="Horizontal">
-							<Label Text="Setting 4" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
-							<CheckBox Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
-						</StackLayout>
-						<StackLayout Orientation="Horizontal">
-							<Label Text="Setting 5" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
-							<CheckBox Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
-						</StackLayout>
-						<StackLayout Orientation="Horizontal">
-							<Label Text="Setting 6" FontSize="20" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
-							<CheckBox Color="#efefef" VerticalOptions="Center" HorizontalOptions="End"/>
-						</StackLayout>
-						<!--<Entry x:Name="eventDetails" Placeholder="Event" TextColor="{DynamicResource BackgroundColor}" PlaceholderColor="Gray" HorizontalOptions="FillAndExpand"/>-->
 					</StackLayout>
 
 					<BoxView HeightRequest="2" BackgroundColor="Gray" Margin="35, 10, 35, 10" CornerRadius="5"/>
 
-					<Button Margin="50, 0" x:Name="menuSaveButton" Text="save*" WidthRequest="76" HorizontalOptions="End" Clicked="CloseWindows"/>
+					<Button Margin="50, 0" x:Name="menuSaveButton" Text="save" WidthRequest="76" HorizontalOptions="End" Clicked="SaveSettings"/>
 
 				</StackLayout>
+
+				<Label AbsoluteLayout.LayoutBounds="0, 1, 1, 80" AbsoluteLayout.LayoutFlags="PositionProportional, WidthProportional" Padding="40, 0, 0, 0" FontSize="20" FontFamily="EnvyCodeR" TextColor="Gray">
+					<Label.FormattedText>
+						<FormattedString>
+							<Span Text="Created By Java - "/>
+							<Span Text="GitHub"
+								  TextColor="CadetBlue">
+								<Span.GestureRecognizers>
+									<TapGestureRecognizer Tapped="OpenGitHub"/>
+								</Span.GestureRecognizers>
+							</Span>
+						</FormattedString>
+					</Label.FormattedText>
+				</Label>
+
 			</AbsoluteLayout>
 		</StackLayout>
 
