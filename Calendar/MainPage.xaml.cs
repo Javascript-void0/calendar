@@ -32,6 +32,7 @@ namespace Calendar
 		public MainPage()
 		{
 			InitializeComponent();
+			LoadSettings();
 			events = LoadEvents();
 			now = DateTime.Now;
 			currYear = now.Year;
