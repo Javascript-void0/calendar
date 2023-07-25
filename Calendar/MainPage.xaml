@@ -23,6 +23,7 @@
 		<Style x:Key="today" TargetType="Label" BasedOn="{StaticResource date}">
 			<Setter Property="FontFamily" Value="SpaceGroteskBold"/>
 			<Setter Property="TextColor" Value="{DynamicResource Accent1}"/>
+			<Setter Property="TextDecorations" Value="Underline"/>
 		</Style>
 		<Style x:Key="todayWeek" TargetType="Label" BasedOn="{StaticResource date}">
 			<Setter Property="TextColor" Value="{DynamicResource Accent2}"/>
@@ -112,8 +113,8 @@
 
 			<!--bottom half-->
 			<StackLayout x:Name="bottom" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" Margin="25, 0">
-				<StackLayout>
-					<Label Text="Scheduled Today: " FontSize="35" HorizontalOptions="Center"/>
+				<StackLayout Margin="0, 30, 0, 0">
+					<Label Text="Scheduled Today: " FontSize="25" HorizontalOptions="Center" TextColor="#888888"/>
 					<StackLayout Orientation="Horizontal" HorizontalOptions="Center">
 						<Label Text="&quot;" FontSize="25" FontFamily="EnvyCodeR"/>
 						<Label x:Name="todayEvent" Text="No event scheduled for today" FontSize="25" Padding="0, 0, 0, 35"/>
