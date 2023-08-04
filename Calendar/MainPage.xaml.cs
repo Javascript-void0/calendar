@@ -129,8 +129,8 @@ namespace Calendar
 						if (ev != null)
 						{
 							// split different events by ', '
-							ev = ev.Replace(", ", ",");
-							var splitMultiple = ev.Split(',');
+							var ev2 = ev.Replace(", ", ",");
+							var splitMultiple = ev2.Split(',');
 
 							numEvents += splitMultiple.Length;
 
