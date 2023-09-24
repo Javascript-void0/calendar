@@ -76,8 +76,13 @@ namespace Calendar
 			var prevMonth = firstDay.AddMonths(-1);
 			var prevDaysInMonth = DateTime.DaysInMonth(prevMonth.Year, prevMonth.Month);
 			var inMonth = false;
-
 			var n = prevDaysInMonth - dayOfWeek + 1; // start?
+			if (dayOfWeek == 0) // month starts on sunday, don't display previous month's days
+			{
+				inMonth = true;
+				n = 1;
+			}
+
 			var numEvents = 0;
 			var monthEvents = new Dictionary<string, int>();
 			for (var r = 0; r < 6; r++)
